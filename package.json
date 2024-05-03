@@ -1,0 +1,10 @@
+{
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "scripts": {
+    "jest": "echo \"Error: not test specfication\" && exit 1"
+  }
+}
+
+
