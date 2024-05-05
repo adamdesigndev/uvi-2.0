@@ -52,7 +52,7 @@ test('true is truthy', () => {
 });
 
 // On .toThrow
-// Used to chekc error handling
+// Used to check error handling
 test('throws on invalid input', () => {
     expect(() =>{
         myFunction('sdfsdf');

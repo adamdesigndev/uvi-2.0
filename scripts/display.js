@@ -55,7 +55,7 @@ static displayResults(data, idMap) {
             // relevent DOM elements using the IDs provided in idMap.
             // Passes parameters selector, property, value.
             this.safeUpdateElement(`#${elements.text}`, 'innerText', item.UV_VALUE.toString());
-            this.safeUpdateElement(`#${elements.img}`, 'src', `image/uvi-bar-${item.UV_VALUE}.svg`);
+            this.safeUpdateElement(`#${elements.img}`, 'src', `/image/uvi-bar-${item.UV_VALUE}.svg`);
         }
     });
 }
@@ -146,7 +146,7 @@ static displayResults(data, idMap) {
         // Loops through each image element.
         this.uviBarImages.forEach(img => {
             // Sets to default image.
-            img.src = 'image/uvi-bar-0.svg';
+            img.src = '/image/uvi-bar-0.svg';
         });
     }
 
