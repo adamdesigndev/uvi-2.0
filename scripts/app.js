@@ -83,8 +83,8 @@ function setupFormListeners(form, input, uvIndexFetcher) {
 }
 
 // Update the search status indicator in the UI.
-// Takes the input and message as parameters.
-function displaySearchStatus(input, message) {
+// Takes the input and message as parameters when called in setupFormListeners.
+export function displaySearchStatus(input, message) {
     // Finds the closest element with class .search-box.
     const searchBox = input.closest('.search-box');
     
@@ -99,7 +99,7 @@ function displaySearchStatus(input, message) {
 
     // If DOM element exists.
     if (searchBox) {
-        // Assigns attribute based on parameters.
+        // Assigns attribute based on parameters passed from setupFormListeners.displaySearchStatus.
         searchBox.setAttribute('data-status', message);
         // Modifies style opacity property based on parameters.
         searchBox.style.setProperty('--status-opacity', '1');
