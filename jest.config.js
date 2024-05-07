@@ -1,11 +1,12 @@
 // jest.config.js
+// Using ES module export
 export default {
-    transform: {
-      '^.+\\.js$': 'babel-jest'
-    },
-    moduleDirectories: [
-      "node_modules",
-      "src" // Adjust this if your source files reside in a different directory
-    ]
-  };
-  
+  testEnvironment: 'jsdom',
+  transform: {
+    '^.+\\.js$': 'babel-jest'
+  },
+  moduleDirectories: [
+    "node_modules",
+    "scripts"  // Adjusted from 'src' to 'scripts' if that's where your JS files are
+  ]
+};
