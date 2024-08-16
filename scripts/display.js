@@ -107,6 +107,8 @@ static displayResults(data, idMap) {
         if (this.dateElement) {
             // Sets inner text to data.DATE.
             this.dateElement.innerText = `Date: ${data.DATE}`;
+            // Set opacity to 1 to make it visible
+            this.dateElement.style.opacity = '1';
         }
     }
 
@@ -117,8 +119,18 @@ static displayResults(data, idMap) {
         if (this.zipElement) {
             // Sets inner text to data.ZIP.
             this.zipElement.innerText = `ZIP: ${data.ZIP}`;
+            // Set opacity to 1 to make it visible
+            this.zipElement.style.opacity = '1';
         }
     }
+
+    // Call these methods to show ZIP and Date after a successful fetch
+    static handleFetchSuccess(data) {
+        // Display date and ZIP after fetch
+        this.displayDate(data);
+        this.displayZIP(data);
+    }
+    
     // Displays an error message in the error container.
     static showError(message) {
         // Checks if DOM element exist.

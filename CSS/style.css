@@ -31,7 +31,7 @@
     --background: #0f161e;
     --prime: #ECECED;
     --secondary: #9FA2A5;
-    --search: #21252A;
+    --search: #3F454B;
     --low: #46FF50;
     --moderate: #FFC146;
     --high: #FF4633;
@@ -230,6 +230,11 @@ margin-bottom: .08rem;
   min-height: 1.2rem;
 }
 
+.zip-text, .date-text {
+  opacity: 0; /* Initially hidden */
+  transition: opacity 0.5s ease-in-out; /* Transition for smooth fade-in */
+}
+
 /* ------Search bar------ */
 .search-box {
   position: relative;
@@ -273,6 +278,12 @@ margin-bottom: .08rem;
   color: var(--prime);
   font-size: 1rem;
   background-color: var(--search);
+}
+
+/* Placeholder text color */
+#js-zip-code-input::placeholder {
+  color: #9FA2A5; /* Replace with your desired color */
+  opacity: 1; /* Ensure the color is applied fully */
 }
 
 #js-zip-code-input:focus {
