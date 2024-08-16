@@ -217,6 +217,25 @@ margin-bottom: .08rem;
   transition: opacity 0.5s ease-in-out;
 }
 
+@keyframes fadeInOut {
+  0%, 100% {
+      opacity: 1;
+  }
+  50% {
+      opacity: 0.5;
+  }
+}
+
+.single-bar {
+  transition: opacity 0.5s ease-in-out;
+}
+
+.single-bar.loading {
+  animation: fadeInOut 0.8s infinite ease-in-out; /* Total duration is 0.4s, so it fades every 0.2s */
+}
+
+
+
 .time-number{
   color: var(--secondary);
   font-size: .9rem;

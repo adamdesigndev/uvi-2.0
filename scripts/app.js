@@ -129,37 +129,47 @@ function clearSearchStatus(input) {
 async function handleFetch(zipCode, uvIndexFetcher) {
     // Checks ZIP code for format
     if (!validateZipCode(zipCode)) {
-        // Error handles can calls Display.showError.
+        // Error handling for invalid ZIP code
         Display.showError('Please enter a valid 5-digit ZIP Code.');
-        // Handle UI response immediately upon validation failure.
         UIAnimations.removeLoadingScreen();
-        // Returns as to not continue after error.
         return;
     }
 
+    // Start the loading animation for all .single-bar elements
+    Display.uviBarImages.forEach(img => {
+        img.classList.add('loading');
+    });
+
     // Handles making call with valid ZIP Code.
     try {
-        // Collects data from fetchUVIndex with passed ZIP.
+        // Fetch data for hourly UV index
         const data = await uvIndexFetcher.fetchUVIndex(zipCode);
-        // Collects data from fetchDailyUVIndex with passed ZIP.
+        // Fetch data for daily high UV index
         const dailyData = await uvIndexFetcher.fetchDailyUVIndex(zipCode);
-        // If both valid data exist.
+
+        // If both valid data exist
         if (data && dailyData) {
-            // Waits for displayResults with passed in parameters from fetch.
+            // Display results after fetch
             await displayResults(data, dailyData, zipCode);
-            // Save to local storage after successful fetch.
+            // Save the last searched ZIP code to local storage
             localStorage.setItem('lastSearchedZipCode', zipCode);
-            // Runs to check if DOM complets updates.
+            // Remove the loading screen
             requestAnimationFrame(UIAnimations.removeLoadingScreen);
         } else {
             // Handle UI cleanup directly here if data fetch was unsuccessful.
             UIAnimations.removeLoadingScreen();
         }
     } catch (error) {
-        // Calls handleError for error handling.
+        // Error handling for fetch failures
         handleError(error);
+    } finally {
+        // Stop the loading animation for all .single-bar elements
+        Display.uviBarImages.forEach(img => {
+            img.classList.remove('loading');
+        });
     }
 }
+
 
 // Log and display errors encountered during fetch operations.
 function handleError(error) {

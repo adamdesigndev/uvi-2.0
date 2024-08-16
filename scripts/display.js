@@ -30,10 +30,12 @@ static safeUpdateElement(selector, property, value) {
     if (element) {
         // Then set the element.property to the given value.
         if (property === 'src') {
-            // Handle the fade-in effect for image updates
-            element.style.opacity = '0'; // Start fade-out
+            // Start the loading animation
+            element.classList.add('loading');
             setTimeout(() => {
                 element[property] = value; // Update the image source
+                // Stop the loading animation and fade-in to the new image
+                element.classList.remove('loading');
                 element.style.opacity = '1'; // Fade-in to the new image
             }, 300); // Adjust the timing to match the transition duration
         } else {
@@ -53,6 +55,10 @@ static safeUpdateElement(selector, property, value) {
 static displayResults(data, idMap) {
     // Makes sure all previous errors are cleared.
     this.clearError();
+    // Start loading animation for all bars
+    this.uviBarImages.forEach(img => {
+        img.classList.add('loading');
+    });
     // Loops through UV Index data.
     data.forEach(item => {
         // For each item retrieves mapping details from idMap using a key 
@@ -73,6 +79,13 @@ static displayResults(data, idMap) {
             }
         }
     });
+
+    // Stop loading animation after updating all elements
+    setTimeout(() => {
+        this.uviBarImages.forEach(img => {
+            img.classList.remove('loading');
+        });
+    }, 300); // Match this with the duration used in safeUpdateElement
 }
     // Displays the daily high UV index fetched from an API.
     // Passes in data.
