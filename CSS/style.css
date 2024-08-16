@@ -155,6 +155,7 @@
     display: flex;
     flex-direction: row;
     gap: 1.5rem;
+    min-width: 252px;
   }
 
   .modal-button-container{
@@ -187,31 +188,37 @@
 .uvi-high-number {
   font-size: 2.7rem;
   font-weight: 500;
-  color: var(--prime);
   letter-spacing: 0rem;
 }
 
 .uvi-level {
   font-size: 1.5rem;
   font-weight: 500;
-  color: var(--prime);
 }
 
+.uvi-high-number, .uvi-level, .hourly-high-text {
+  color: var(--secondary); /* Set initial color */
+  transition: color 0.5s ease-in-out; /* Smooth transition for color change */
+}
+
+.uvi-high-number.updated, .uvi-level.updated, .hourly-high-text.updated {
+  color: var(--prime); /* Set color after fetch */
+}
 /* ------UV Index graph------ */
 .hourly-high-text {
 font-size: .9rem;
 font-weight: 600;
-color: var(--prime);
 text-align: center;
 margin-bottom: .08rem;
 }
 
 .single-bar-container img {
   height: 165px;
+  transition: opacity 0.5s ease-in-out;
 }
 
 .time-number{
-  color: var(--prime);
+  color: var(--secondary);
   font-size: .9rem;
   line-height: .5rem;
 }
@@ -226,13 +233,13 @@ margin-bottom: .08rem;
   font-size: .9rem;
   font-weight: 500;
   letter-spacing: .04rem;
-  color: var(--prime);
+  color: var(--secondary);
   min-height: 1.2rem;
+  transition: color 0.5s ease-in-out;
 }
 
-.zip-text, .date-text {
-  opacity: 0; /* Initially hidden */
-  transition: opacity 0.5s ease-in-out; /* Transition for smooth fade-in */
+.date-zip-container.updated p {
+  color: var(--prime); /* Set color after fetch */
 }
 
 /* ------Search bar------ */
@@ -282,7 +289,7 @@ margin-bottom: .08rem;
 
 /* Placeholder text color */
 #js-zip-code-input::placeholder {
-  color: #9FA2A5; /* Replace with your desired color */
+  color: #ECECED; /* Replace with your desired color */
   opacity: 1; /* Ensure the color is applied fully */
 }
 

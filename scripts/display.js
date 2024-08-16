@@ -29,7 +29,16 @@ static safeUpdateElement(selector, property, value) {
     // If else to check if element exist
     if (element) {
         // Then set the element.property to the given value.
+        if (property === 'src') {
+            // Handle the fade-in effect for image updates
+            element.style.opacity = '0'; // Start fade-out
+            setTimeout(() => {
+                element[property] = value; // Update the image source
+                element.style.opacity = '1'; // Fade-in to the new image
+            }, 300); // Adjust the timing to match the transition duration
+        } else {
         element[property] = value;
+    } 
     // If no element is found.
     } else {
         // Log error and pass in the selector.
@@ -56,6 +65,12 @@ static displayResults(data, idMap) {
             // Passes parameters selector, property, value.
             this.safeUpdateElement(`#${elements.text}`, 'innerText', item.UV_VALUE.toString());
             this.safeUpdateElement(`#${elements.img}`, 'src', `/image/uvi-bar-${item.UV_VALUE}.svg`);
+
+            // Add the 'updated' class to change the color
+            const textElement = document.getElementById(elements.text);
+            if (textElement) {
+                textElement.classList.add('updated');
+            }
         }
     });
 }
@@ -68,6 +83,10 @@ static displayResults(data, idMap) {
             this.dailyHighElement.innerText = data.UV_INDEX.toString();
             // calls updateUVLevel passes DOM element and data as parameters.
             this.updateUVLevel(this.dailyUVLevelElement, data.UV_INDEX);
+
+            // Add the 'updated' class to change the color
+            this.dailyHighElement.classList.add('updated');
+            this.dailyUVLevelElement.classList.add('updated');
         } else {
             // logs to notify data or element does not exist.
             console.log('No data available or element not found for daily UV high.');
@@ -107,8 +126,8 @@ static displayResults(data, idMap) {
         if (this.dateElement) {
             // Sets inner text to data.DATE.
             this.dateElement.innerText = `Date: ${data.DATE}`;
-            // Set opacity to 1 to make it visible
-            this.dateElement.style.opacity = '1';
+            // Add the 'updated' class to change the color
+            this.dateElement.closest('.date-zip-container').classList.add('updated');
         }
     }
 
@@ -119,8 +138,8 @@ static displayResults(data, idMap) {
         if (this.zipElement) {
             // Sets inner text to data.ZIP.
             this.zipElement.innerText = `ZIP: ${data.ZIP}`;
-            // Set opacity to 1 to make it visible
-            this.zipElement.style.opacity = '1';
+            // Add the 'updated' class to change the color
+            this.zipElement.closest('.date-zip-container').classList.add('updated');
         }
     }
 
