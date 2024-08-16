@@ -288,14 +288,21 @@
       <!-- Search -->
       <div class="search-box">
         <form action="" id="search-form">
-          <input
-            type="search"
-            id="js-zip-code-input"
-            placeholder="Enter ZIP code"
-            aria-label="Search by ZIP code"
-            pattern="\d*"
-            maxlength="5"
-          />
+          <div class="input-container">
+            <img
+              src="/image/uv-search-icon.svg"
+              alt="Search Icon"
+              class="input-icon"
+            />
+            <input
+              type="search"
+              id="js-zip-code-input"
+              placeholder="Enter ZIP code"
+              aria-label="Search by ZIP code"
+              pattern="\d*"
+              maxlength="5"
+            />
+          </div>
         </form>
       </div>
     </section>

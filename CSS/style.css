@@ -250,18 +250,29 @@ margin-bottom: .08rem;
   transition: opacity 0.5s ease-out;
 }
 
+.input-container {
+  position: relative;
+  width: 100%;
+}
+
+.input-icon {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  width: 16px; /* Adjust size as needed */
+  height: 16px; /* Adjust size as needed */
+  pointer-events: none; /* Ensures the icon doesn't block input clicks */
+}
+
 #js-zip-code-input {
   width: 100%;
-  padding: 9px 9px 9px 34px; /* Adjust padding for text alignment and icon spacing */
+  padding: 9px 9px 9px 34px; /* Adjust padding to make space for the icon */
   border: none;
   border-radius: 25px; /* Optional: for rounded corners */
   color: var(--prime);
   font-size: 1rem;
   background-color: var(--search);
-  background-image: url('image/uv-search-icon.svg'); /* Path to your search icon */
-  background-repeat: no-repeat;
-  background-size: 16px 16px; /* Adjust based on the size of your icon */
-  background-position: 10px center; /* Adjust horizontal position and vertically center */
 }
 
 #js-zip-code-input:focus {
