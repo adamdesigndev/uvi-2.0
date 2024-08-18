@@ -1,0 +1,310 @@
+<!-- @format -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UV Index</title>
+    <link rel="stylesheet" href="/CSS/style.css" />
+    <link rel="apple-touch-icon" href="image/apple-touch-icon-2.png" />
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Scripts -->
+    <script defer type="module" src="/scripts/app.js"></script>
+  </head>
+
+  <body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+      <div class="logo-container">
+        <img
+          src="/image/uvi-2-animation-1.svg"
+          alt="Logo Part 1"
+          class="logo-part1"
+        />
+        <img
+          src="/image/uvi-2-animation-2.svg"
+          alt="Logo Part 2"
+          class="logo-part2"
+        />
+        <img
+          src="/image/uvi-2-animation-3.svg"
+          alt="Logo Part 3"
+          class="logo-part3"
+        />
+        <img
+          src="/image/uvi-2-animation-4.svg"
+          alt="Logo Part 4"
+          class="logo-part4"
+        />
+      </div>
+    </div>
+
+    <!-- Logo -->
+    <header class="main-outer-container">
+      <div class="header-container">
+        <img class="logo" src="/image/uvi-2.svg" alt="" />
+      </div>
+    </header>
+
+    <!-- Modal -->
+    <dialog class="modal" id="modal">
+      <div class="modal-button-container">
+        <button class="modal-close-button close-button">X</button>
+      </div>
+
+      <h2>About the UV Index</h2>
+      <h3>Exposure Category</h3>
+      <div class="modal-level-container">
+        <p>
+          <span class="modal-subhead"
+            >Low 1-2
+            <img class="modal-graph" src="/image/modal-bar-low.svg" alt=""
+          /></span>
+        </p>
+        <p>
+          <span class="modal-subhead"
+            >Moderate 3-5
+            <img class="modal-graph" src="/image/modal-bar-mod.svg" alt=""
+          /></span>
+        </p>
+        <p>
+          <span class="modal-subhead"
+            >High 6-7
+            <img class="modal-graph" src="/image/modal-bar-high.svg" alt=""
+          /></span>
+        </p>
+        <p>
+          <span class="modal-subhead"
+            >Very High 9-10
+            <img class="modal-graph" src="/image/modal-bar-vhigh.svg" alt=""
+          /></span>
+        </p>
+        <p>
+          <span class="modal-subhead"
+            >Extreme 11+
+            <img class="modal-graph" src="/image/modal-bar-extr.svg" alt=""
+          /></span>
+        </p>
+      </div>
+      <div class="credit-container">
+        <p class="credit-name">Developed by Adam Flores</p>
+        <p class="credit-power">
+          Powered by the
+          <a
+            class="modal-link"
+            href="https://www.epa.gov/enviro/web-services#uvindex"
+            target="_blank"
+            >EPA</a
+          >
+        </p>
+        <p class="credit-power">2024 v2.1</p>
+      </div>
+    </dialog>
+
+    <!-- Content Top -->
+    <section class="main-outer-container main-section-container">
+      <div class="container-top">
+        <h1 class="header-text">Daily UV Index</h1>
+        <div class="container-daily-high">
+          <p class="uvi-high-number" id="dailyUVHigh">0</p>
+          <p class="uvi-level" id="dailyUVLevel"></p>
+        </div>
+      </div>
+
+      <!-- Data Chart -->
+      <div class="data-container">
+        <div class="single-bar-container">
+          <p class="hourly-high-text" id="js-uvIndex2">0</p>
+          <img
+            class="single-bar"
+            id="js-uvi-bar2"
+            src="/image/uvi-bar-0.svg"
+            alt="UV Index Bar"
+          />
+          <div class="time-container">
+            <p class="time-number">8</p>
+            <p class="time-am-pm">am</p>
+          </div>
+        </div>
+
+        <div class="single-bar-container">
+          <p class="hourly-high-text" id="js-uvIndex3">0</p>
+          <img
+            class="single-bar"
+            id="js-uvi-bar3"
+            src="/image/uvi-bar-0.svg"
+            alt="UV Index Bar"
+          />
+          <div class="time-container">
+            <p class="time-number">9</p>
+            <p class="time-am-pm">am</p>
+          </div>
+        </div>
+
+        <div class="single-bar-container">
+          <p class="hourly-high-text" id="js-uvIndex4">0</p>
+          <img
+            class="single-bar"
+            id="js-uvi-bar4"
+            src="/image/uvi-bar-0.svg"
+            alt="UV Index Bar"
+          />
+          <div class="time-container">
+            <p class="time-number">10</p>
+            <p class="time-am-pm">am</p>
+          </div>
+        </div>
+
+        <div class="single-bar-container">
+          <p class="hourly-high-text" id="js-uvIndex5">0</p>
+          <img
+            class="single-bar"
+            id="js-uvi-bar5"
+            src="/image/uvi-bar-0.svg"
+            alt="UV Index Bar"
+          />
+          <div class="time-container">
+            <p class="time-number">11</p>
+            <p class="time-am-pm">am</p>
+          </div>
+        </div>
+
+        <div class="single-bar-container">
+          <p class="hourly-high-text" id="js-uvIndex6">0</p>
+          <img
+            class="single-bar"
+            id="js-uvi-bar6"
+            src="/image/uvi-bar-0.svg"
+            alt="UV Index Bar"
+          />
+          <div class="time-container">
+            <p class="time-number">12</p>
+            <p class="time-am-pm">pm</p>
+          </div>
+        </div>
+
+        <div class="single-bar-container">
+          <p class="hourly-high-text" id="js-uvIndex7">0</p>
+          <img
+            class="single-bar"
+            id="js-uvi-bar7"
+            src="/image/uvi-bar-0.svg"
+            alt="UV Index Bar"
+          />
+          <div class="time-container">
+            <p class="time-number">1</p>
+            <p class="time-am-pm">pm</p>
+          </div>
+        </div>
+
+        <div class="single-bar-container">
+          <p class="hourly-high-text" id="js-uvIndex8">0</p>
+          <img
+            class="single-bar"
+            id="js-uvi-bar8"
+            src="/image/uvi-bar-0.svg"
+            alt="UV Index Bar"
+          />
+          <div class="time-container">
+            <p class="time-number">2</p>
+            <p class="time-am-pm">pm</p>
+          </div>
+        </div>
+
+        <div class="single-bar-container">
+          <p class="hourly-high-text" id="js-uvIndex9">0</p>
+          <img
+            class="single-bar"
+            id="js-uvi-bar9"
+            src="/image/uvi-bar-0.svg"
+            alt="UV Index Bar"
+          />
+          <div class="time-container">
+            <p class="time-number">3</p>
+            <p class="time-am-pm">pm</p>
+          </div>
+        </div>
+
+        <div class="single-bar-container">
+          <p class="hourly-high-text" id="js-uvIndex10">0</p>
+          <img
+            class="single-bar"
+            id="js-uvi-bar10"
+            src="/image/uvi-bar-0.svg"
+            alt="UV Index Bar"
+          />
+          <div class="time-container">
+            <p class="time-number">4</p>
+            <p class="time-am-pm">pm</p>
+          </div>
+        </div>
+
+        <div class="single-bar-container">
+          <p class="hourly-high-text" id="js-uvIndex11">0</p>
+          <img
+            class="single-bar"
+            id="js-uvi-bar11"
+            src="/image/uvi-bar-0.svg"
+            alt="UV Index Bar"
+          />
+          <div class="time-container">
+            <p class="time-number">5</p>
+            <p class="time-am-pm">pm</p>
+          </div>
+        </div>
+
+        <div class="single-bar-container">
+          <p class="hourly-high-text" id="js-uvIndex12">0</p>
+          <img
+            class="single-bar"
+            id="js-uvi-bar12"
+            src="/image/uvi-bar-0.svg"
+            alt="UV Index Bar"
+          />
+          <div class="time-container">
+            <p class="time-number">6</p>
+            <p class="time-am-pm">pm</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Date and zip -->
+      <div class="date-zip-container">
+        <p class="zip-text" id="js-display-zip">ZIP: 00000</p>
+        <p class="date-text" id="js-date">Date: Xxx/00/0000</p>
+      </div>
+
+      <!-- Error -->
+      <div id="error-container" style="display: none; color: red"></div>
+
+      <!-- Search -->
+      <div class="search-box">
+        <form action="" id="search-form">
+          <div class="input-container">
+            <img
+              src="/image/uv-search-icon.svg"
+              alt="Search Icon"
+              class="input-icon"
+            />
+            <input
+              type="search"
+              id="js-zip-code-input"
+              placeholder="Enter ZIP code"
+              aria-label="Search by ZIP code"
+              pattern="\d*"
+              maxlength="5"
+            />
+          </div>
+        </form>
+      </div>
+    </section>
+  </body>
+</html>
