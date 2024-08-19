@@ -180,8 +180,13 @@
     font-size: .7rem;
     font-weight: 600;
     letter-spacing: .1rem;
-    color: var(--prime);
+    color: var(--secondary);
     text-align: center;
+    transition: all 0.5s ease-in-out;
+  }
+
+  .header-text.updated {
+    color: var(--prime);
   }
 
 /* ------UV Index info------ */
@@ -234,19 +239,24 @@ margin-bottom: .08rem;
   animation: fadeInOut 0.8s infinite ease-in-out; /* Total duration is 0.4s, so it fades every 0.2s */
 }
 
-
-
 .time-number{
   color: var(--secondary);
   font-size: .9rem;
   line-height: .5rem;
+  transition: all 0.5s ease-in-out;
 }
 
 .time-am-pm{
   color: var(--secondary);
   font-size: .7rem;
   letter-spacing: .08rem;
+  transition: all 0.5s ease-in-out;
 }
+
+.time-number.updated, .time-am-pm.updated {
+  color: var(--prime);
+}
+
 
 .date-text, .zip-text{
   font-size: .9rem;

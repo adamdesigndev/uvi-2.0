@@ -22,6 +22,24 @@ export class Display {
         }
     }
 
+    // Method to update the color of the elements by adding the 'updated' class
+    static updateElementColors() {
+        // Select all elements with the class `.time-number`
+        document.querySelectorAll('.time-number').forEach(element => {
+            element.classList.add('updated');
+        });
+    
+        // Select all elements with the class `.time-am-pm`
+        document.querySelectorAll('.time-am-pm').forEach(element => {
+            element.classList.add('updated');
+        });
+    
+        // Select all elements with the class `.header-text`
+        document.querySelectorAll('.header-text').forEach(element => {
+            element.classList.add('updated');
+        });
+    }
+
 // Utility method to safely update a property of a DOM element identified by a CSS selector.
 static safeUpdateElement(selector, property, value) {
     // Grabs the selector and assigns to element.
@@ -100,6 +118,7 @@ static displayResults(data, idMap) {
             // Add the 'updated' class to change the color
             this.dailyHighElement.classList.add('updated');
             this.dailyUVLevelElement.classList.add('updated');
+            this.updateElementColors();
         } else {
             // logs to notify data or element does not exist.
             console.log('No data available or element not found for daily UV high.');
