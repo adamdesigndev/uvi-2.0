@@ -1,4 +1,7 @@
 // app.js
+// Main entry point for initializing the UV Index Forecast application.
+// Handles DOM interactions, API fetch operations, and UI updates.
+
 import { UVIndexFetcher } from './uvIndexFetcher.js';
 import { Display } from './display.js';
 import { idMap } from './idMap.js';
@@ -6,7 +9,7 @@ import { UIAnimations } from './animations.js';
 
 // Initialize and manage operations after the DOM has fully loaded.
 document.addEventListener('DOMContentLoaded', async () => {
-    // Instantiate objects and select DOM elements.
+    // Instantiate objects for data fetching and select necessary DOM elements.
     const uvIndexFetcher = new UVIndexFetcher();
     const zipCodeInput = document.getElementById('js-zip-code-input');
     const searchForm = document.getElementById('search-form');
@@ -14,202 +17,152 @@ document.addEventListener('DOMContentLoaded', async () => {
     const openModal = document.querySelector('.logo');
     const closeModal = document.querySelector('.close-button');
 
-    // Begin the loading screen animation.
+    // Begin the loading screen animation sequence.
     UIAnimations.fadeInLogoParts();
-    // Set up modal dialog interactions.
+    // Set up modal dialog interactions for the 'About UV Index' information.
     setupModal(openModal, closeModal, modal);
     // Initialize a timeout to manage the removal of the loading screen.
     let loadingScreenTimeout = setTimeout(safeRemoveLoadingScreen, 2500);
 
-     // Attempt to fetch UV index using the last searched ZIP code from local storage.
+    // Attempt to fetch UV index data using the last searched ZIP code from local storage.
     const savedZipCode = localStorage.getItem('lastSearchedZipCode');
-    // Checks if there is a ZIP in local storage
     if (savedZipCode) {
-        // Populate the input field with the saved ZIP code.
-        zipCodeInput.value = savedZipCode;
-        // Perform a fetch operation and handle the result.
-        await handleFetch(savedZipCode, uvIndexFetcher);
-        // Clear the input field after the fetch.
-        zipCodeInput.value = ''; 
+        zipCodeInput.value = savedZipCode;  // Populate input with saved ZIP code.
+        await handleFetch(savedZipCode, uvIndexFetcher);  // Fetch data and update UI.
+        zipCodeInput.value = '';  // Clear input field after use.
     }
 
-    // Add event listeners to the search form for handling submissions.
+    // Set up event listeners for the search form submission and input validation.
     setupFormListeners(searchForm, zipCodeInput, uvIndexFetcher);
 
-    // Define a function to safely remove the loading screen, ensuring the timer is cleared.
+    // Function to safely remove the loading screen with a cleared timeout.
     function safeRemoveLoadingScreen() {
         clearTimeout(loadingScreenTimeout);
         UIAnimations.removeLoadingScreen();
     }
 });
 
-// Configure modal interactions.
+// Configure modal interactions to show/hide modal dialog.
 function setupModal(openModal, closeModal, modal) {
-    // Add event listeners to open and close the modal.
     openModal.addEventListener('click', () => modal.showModal());
     closeModal.addEventListener('click', () => modal.close());
 }
 
 // Set up form event listeners and manage search operations.
-// Passes on DOM elements and new UVIndexFetcher.
 function setupFormListeners(form, input, uvIndexFetcher) {
-    // On form submit, runs event.
     form.addEventListener('submit', async event => {
-        // Prevent from auto refreshing page.
-        event.preventDefault();
-        // Optionally blur the input field to remove focus.
-        input.blur(); 
-        // Calls and sets searching status with passed in parameters.
-        displaySearchStatus(input, 'Searching...');
+        event.preventDefault();  // Prevent page refresh on form submission.
+        input.blur();  // Optionally blur the input field to remove focus.
+        displaySearchStatus(input, 'Searching...');  // Indicate search status.
+
         try {
-            // Waits for handleFetch with inputed value and uvIndexFetcher.
-            await handleFetch(input.value.trim(), uvIndexFetcher);
-            // Updates search statuts.
-            displaySearchStatus(input, 'Search complete');
+            await handleFetch(input.value.trim(), uvIndexFetcher);  // Fetch and handle data.
+            displaySearchStatus(input, 'Search complete');  // Update status on success.
         } catch (error) {
-            // Any errors get handle with handleError.
-            handleError(error);
-            // Updates search status.
-            displaySearchStatus(input, 'Search failed');
+            handleError(error);  // Handle any errors during fetching.
+            displaySearchStatus(input, 'Search failed');  // Update status on failure.
         }
-        // Sets timeout to clear the search status
-        setTimeout(() => clearSearchStatus(input), 2000); // Clear status after delay
+
+        // Clear the search status after a delay.
+        setTimeout(() => clearSearchStatus(input), 2000);
     });
 
-    // Ensure that only numeric characters can be entered into the ZIP code input.
+    // Ensure only numeric input is allowed for ZIP code.
     input.addEventListener('input', () => {
         input.value = input.value.replace(/[^0-9]/g, '');
     });
 }
 
 // Update the search status indicator in the UI.
-// Takes the input and message as parameters when called in setupFormListeners.
 export function displaySearchStatus(input, message) {
-    // Finds the closest element with class .search-box.
-    const searchBox = input.closest('.search-box');
-    
-    // Define color mappings using an object.
+    const searchBox = input.closest('.search-box');  // Find the closest .search-box element.
+
+    // Define color mappings for different statuses.
     const colorMap = {
         'Searching...': 'var(--extreme)',
         'Search complete': 'var(--low)',
         'Search failed': 'var(--high)',
-        // Default case
         'default': 'var(--prime)'
     };
 
-    // If DOM element exists.
     if (searchBox) {
-        // Assigns attribute based on parameters passed from setupFormListeners.displaySearchStatus.
         searchBox.setAttribute('data-status', message);
-        // Modifies style opacity property based on parameters.
         searchBox.style.setProperty('--status-opacity', '1');
 
-        // Dynamic set color based on the status message from
-        // parameter when called using CSS custom properties.
-        // Also set Fallback to default if message is not found.
+        // Dynamically set color based on status message.
         const color = colorMap[message] || colorMap['default'];
-        // Finally set color property based on message color.
         searchBox.style.setProperty('--status-color', color);
     }
 }
 
 // Clear the search status indicator after a specified delay.
-// Takes input.
 function clearSearchStatus(input) {
-// Finds the closest element with class .search-box.
     const searchBox = input.closest('.search-box');
-    // If it exists.
     if (searchBox) {
-        // Set style property to hide.
-        searchBox.style.setProperty('--status-opacity', '0');
+        searchBox.style.setProperty('--status-opacity', '0');  // Hide the status indicator.
     }
 }
 
 // Manage the fetching and handling of UV index data.
 async function handleFetch(zipCode, uvIndexFetcher) {
-    // Checks ZIP code for format
     if (!validateZipCode(zipCode)) {
-        // Error handling for invalid ZIP code
-        Display.showError('Please enter a valid 5-digit ZIP Code.');
+        Display.showError('Please enter a valid 5-digit ZIP Code.');  // Error for invalid ZIP code.
         UIAnimations.removeLoadingScreen();
         return;
     }
 
-    // Start the loading animation for all .single-bar elements
+    // Start the loading animation for all .single-bar elements.
     Display.uviBarImages.forEach(img => {
         img.classList.add('loading');
     });
 
-    // Handles making call with valid ZIP Code.
     try {
-        // Fetch data for hourly UV index
+        // Fetch UV index data for hourly and daily indices.
         const data = await uvIndexFetcher.fetchUVIndex(zipCode);
-        // Fetch data for daily high UV index
         const dailyData = await uvIndexFetcher.fetchDailyUVIndex(zipCode);
 
-        // If both valid data exist
         if (data && dailyData) {
-            // Display results after fetch
+            // Display fetched results and save the last searched ZIP code.
             await displayResults(data, dailyData, zipCode);
-            // Save the last searched ZIP code to local storage
             localStorage.setItem('lastSearchedZipCode', zipCode);
-            // Remove the loading screen
-            requestAnimationFrame(UIAnimations.removeLoadingScreen);
+            requestAnimationFrame(UIAnimations.removeLoadingScreen);  // Smooth removal of the loading screen.
         } else {
-            // Handle UI cleanup directly here if data fetch was unsuccessful.
-            UIAnimations.removeLoadingScreen();
+            UIAnimations.removeLoadingScreen();  // Handle UI cleanup if fetch failed.
         }
     } catch (error) {
-        // Error handling for fetch failures
-        handleError(error);
+        handleError(error);  // Error handling for fetch failures.
     } finally {
-        // Stop the loading animation for all .single-bar elements
+        // Stop the loading animation after fetch completes.
         Display.uviBarImages.forEach(img => {
             img.classList.remove('loading');
         });
     }
 }
 
-
 // Log and display errors encountered during fetch operations.
 function handleError(error) {
-    // Errors will will be logged in console.
-    console.error('Fetch error:', error);
-    // Will display error message in DOM.
-    Display.showError('Error displaying data. Please try again.');
-    // Will Clear DOM due to errors.
-    Display.clearAllDisplays();
-    // Ensures loading screen does not get stuck due to failed fetch.
-    UIAnimations.removeLoadingScreen();
+    console.error('Fetch error:', error);  // Log errors to console.
+    Display.showError('Error displaying data. Please try again.');  // Display error in UI.
+    Display.clearAllDisplays();  // Clear UI due to errors.
+    UIAnimations.removeLoadingScreen();  // Ensure loading screen is not stuck.
 }
 
 // Validate the format of a ZIP code.
-// Takes the ZIP code as parameter.
 function validateZipCode(zipCode) {
-    // Returns the ready to use ZIP code.
-    return /^\d{5}$/.test(zipCode);
+    return /^\d{5}$/.test(zipCode);  // Return true if ZIP code is a valid 5-digit number.
 }
 
 // Manage the display of UV index results across different parts of the UI.
-// Passes in data and ZIP code.
 async function displayResults(hourlyData, dailyData, zipCode) {
-    // Holds array of promises to update DOM.
     const displayPromises = [
-        // Calls displayResults and passes data and idMap.
-        Display.displayResults(hourlyData, idMap),
-        // Calls displayDailyHigh and passes data at the first index.
-        Display.displayDailyHigh(dailyData[0]),
-        // Calls displayDate and passes data at the first index.
-        Display.displayDate(dailyData[0]),
-        // Calls displayZIP and passes newly created object with zipCode.
-        Display.displayZIP({ ZIP: zipCode })
+        Display.displayResults(hourlyData, idMap),  // Display hourly results.
+        Display.displayDailyHigh(dailyData[0]),  // Display daily high.
+        Display.displayDate(dailyData[0]),  // Display the date.
+        Display.displayZIP({ ZIP: zipCode })  // Display the searched ZIP code.
     ];
 
-    // Waits for all promised to resolve.
-    await Promise.all(displayPromises);
-    // Runs function to make sure DOM elements complete loading.
+    await Promise.all(displayPromises);  // Wait for all display updates to complete.
     requestAnimationFrame(() => {
-        // Removes loading screen.
-        requestAnimationFrame(UIAnimations.removeLoadingScreen);
+        requestAnimationFrame(UIAnimations.removeLoadingScreen);  // Remove loading screen smoothly.
     });
 }

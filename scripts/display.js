@@ -1,6 +1,7 @@
 // display.js
 // This module defines a class responsible for managing the display of UI components 
 // related to UV index information on the webpage.
+
 export class Display {
     // Static properties to store references to specific DOM elements.
     static errorContainer = document.getElementById('error-container');
@@ -13,131 +14,91 @@ export class Display {
 
     // Method to clear the error message from the error container.
     static clearError() {
-        // First checks if the container currently exists in DOM.
         if (this.errorContainer) {
-            // If so, then clear the content.
-            this.errorContainer.textContent = '';
-            // then display none to hide the error container.
-            this.errorContainer.style.display = 'none';
+            this.errorContainer.textContent = ''; // Clear the content.
+            this.errorContainer.style.display = 'none'; // Hide the error container.
         }
     }
 
-    // Method to update the color of the elements by adding the 'updated' class
+    // Method to update the color of certain elements by adding the 'updated' class.
     static updateElementColors() {
-        // Select all elements with the class `.time-number`
-        document.querySelectorAll('.time-number').forEach(element => {
-            element.classList.add('updated');
-        });
-    
-        // Select all elements with the class `.time-am-pm`
-        document.querySelectorAll('.time-am-pm').forEach(element => {
-            element.classList.add('updated');
-        });
-    
-        // Select all elements with the class `.header-text`
-        document.querySelectorAll('.header-text').forEach(element => {
-            element.classList.add('updated');
-        });
+        // Add 'updated' class to elements to change their color.
+        document.querySelectorAll('.time-number').forEach(element => element.classList.add('updated'));
+        document.querySelectorAll('.time-am-pm').forEach(element => element.classList.add('updated'));
+        document.querySelectorAll('.header-text').forEach(element => element.classList.add('updated'));
     }
 
-// Utility method to safely update a property of a DOM element identified by a CSS selector.
-static safeUpdateElement(selector, property, value) {
-    // Grabs the selector and assigns to element.
-    const element = document.querySelector(selector);
-    // If else to check if element exist
-    if (element) {
-        // Then set the element.property to the given value.
-        if (property === 'src') {
-            // Start the loading animation
-            element.classList.add('loading');
-            setTimeout(() => {
-                element[property] = value; // Update the image source
-                // Stop the loading animation and fade-in to the new image
-                element.classList.remove('loading');
-                element.style.opacity = '1'; // Fade-in to the new image
-            }, 300); // Adjust the timing to match the transition duration
-        } else {
-        element[property] = value;
-    } 
-    // If no element is found.
-    } else {
-        // Log error and pass in the selector.
-        console.error(`Element with selector ${selector} not found.`);
-        // Calls this instance of showError.
-        this.showError('A display error occurred, please try again.');
-    }
-}
-
-// Displays UV index results fetched from an API. 
-// Takes an array of data and a mapping from time to element IDs.
-static displayResults(data, idMap) {
-    // Makes sure all previous errors are cleared.
-    this.clearError();
-    // Start loading animation for all bars
-    this.uviBarImages.forEach(img => {
-        img.classList.add('loading');
-    });
-    // Loops through UV Index data.
-    data.forEach(item => {
-        // For each item retrieves mapping details from idMap using a key 
-        // derived from the item's DATE_TIME property.
-        // Set elements to eg "08 AM".
-        const elements = idMap[item.DATE_TIME.slice(-5)];
-        if (elements) {
-            // Calls safeUpdateElement to update the text and image src attributes of the 
-            // relevent DOM elements using the IDs provided in idMap.
-            // Passes parameters selector, property, value.
-            this.safeUpdateElement(`#${elements.text}`, 'innerText', item.UV_VALUE.toString());
-            this.safeUpdateElement(`#${elements.img}`, 'src', `/image/uvi-bar-${item.UV_VALUE}.svg`);
-
-            // Add the 'updated' class to change the color
-            const textElement = document.getElementById(elements.text);
-            if (textElement) {
-                textElement.classList.add('updated');
+    // Utility method to safely update a property of a DOM element identified by a CSS selector.
+    static safeUpdateElement(selector, property, value) {
+        const element = document.querySelector(selector); // Select the element.
+        if (element) {
+            if (property === 'src') {  // Special handling for updating 'src' properties.
+                element.classList.add('loading');  // Start the loading animation.
+                setTimeout(() => {
+                    element[property] = value;  // Update the image source.
+                    element.classList.remove('loading');  // Stop loading animation.
+                    element.style.opacity = '1';  // Fade-in the new image.
+                }, 300);  // Delay matches the transition duration.
+            } else {
+                element[property] = value;  // Set other properties directly.
             }
+        } else {
+            console.error(`Element with selector ${selector} not found.`);  // Log error if element is not found.
+            this.showError('A display error occurred, please try again.');  // Show a generic error message.
         }
-    });
+    }
 
-    // Stop loading animation after updating all elements
-    setTimeout(() => {
-        this.uviBarImages.forEach(img => {
-            img.classList.remove('loading');
+    // Displays UV index results fetched from an API.
+    // Takes an array of data and a mapping from time to element IDs.
+    static displayResults(data, idMap) {
+        this.clearError();  // Ensure previous errors are cleared.
+        this.uviBarImages.forEach(img => img.classList.add('loading'));  // Start loading animation for all bars.
+
+        data.forEach(item => {
+            const elements = idMap[item.DATE_TIME.slice(-5)];  // Get mapped elements using time key.
+            if (elements) {
+                this.safeUpdateElement(`#${elements.text}`, 'innerText', item.UV_VALUE.toString());  // Update text.
+                this.safeUpdateElement(`#${elements.img}`, 'src', `/image/uvi-bar-${item.UV_VALUE}.svg`);  // Update image.
+
+                // Add the 'updated' class to change the color.
+                const textElement = document.getElementById(elements.text);
+                if (textElement) {
+                    textElement.classList.add('updated');
+                }
+            }
         });
-    }, 300); // Match this with the duration used in safeUpdateElement
-}
-    // Displays the daily high UV index fetched from an API.
-    // Passes in data.
-    static displayDailyHigh(data) {
-        // Checks if data, dailyHighElement, dailyUVLevelElement exist.
-        if (data && this.dailyHighElement && this.dailyUVLevelElement) {
-            // Sets text of dailyHighElement to the data UV_INDEX.
-            this.dailyHighElement.innerText = data.UV_INDEX.toString();
-            // calls updateUVLevel passes DOM element and data as parameters.
-            this.updateUVLevel(this.dailyUVLevelElement, data.UV_INDEX);
 
-            // Add the 'updated' class to change the color
+        // Stop loading animation after updating all elements.
+        setTimeout(() => {
+            this.uviBarImages.forEach(img => img.classList.remove('loading'));
+        }, 300);  // Duration matches the one used in safeUpdateElement.
+    }
+
+    // Displays the daily high UV index fetched from an API.
+    static displayDailyHigh(data) {
+        if (data && this.dailyHighElement && this.dailyUVLevelElement) {
+            this.dailyHighElement.innerText = data.UV_INDEX.toString();  // Update daily high text.
+            this.updateUVLevel(this.dailyUVLevelElement, data.UV_INDEX);  // Update UV level display.
+
+            // Add the 'updated' class to change the color.
             this.dailyHighElement.classList.add('updated');
             this.dailyUVLevelElement.classList.add('updated');
-            this.updateElementColors();
+            this.updateElementColors();  // Update other element colors.
         } else {
-            // logs to notify data or element does not exist.
-            console.log('No data available or element not found for daily UV high.');
+            console.log('No data available or element not found for daily UV high.');  // Log missing data or element.
         }
     }
+
     // Updates the display of UV index severity level.
-    // Takes in DOM element and data.
     static updateUVLevel(element, uvIndex) {
-        // Converts uvIndex from a string to an integer to make comparisons.
-        const parsedUVIndex = parseInt(uvIndex, 10);
-        // Checks if it is not a number NaN.
-        if (isNaN(parsedUVIndex)) {
-            // Sets inner text to 'Invalid data'.
-            element.innerText = 'Invalid data';
-            // Then returns as a safeguard to prevent from futher running at this point.
-            return;
+        const parsedUVIndex = parseInt(uvIndex, 10);  // Convert UV index to an integer.
+
+        if (isNaN(parsedUVIndex)) {  // Check if parsing failed.
+            element.innerText = 'Invalid data';  // Display error for invalid data.
+            return;  // Exit early to prevent further processing.
         }
 
-        // Updates text based on UV index thresholds.
+        // Update text based on UV index thresholds.
         if (parsedUVIndex <= 2) {
             element.innerText = "Low";
         } else if (parsedUVIndex <= 5) {
@@ -152,83 +113,56 @@ static displayResults(data, idMap) {
     }
 
     // Updates the display of the current date.
-    // Takes data as parameter.
     static displayDate(data) {
-        // Checks if DOM element exist.
         if (this.dateElement) {
-            // Sets inner text to data.DATE.
-            this.dateElement.innerText = `Date: ${data.DATE}`;
-            // Add the 'updated' class to change the color
-            this.dateElement.closest('.date-zip-container').classList.add('updated');
+            this.dateElement.innerText = `Date: ${data.DATE}`;  // Update date display.
+            this.dateElement.closest('.date-zip-container').classList.add('updated');  // Change color.
         }
     }
 
-    /// Updates the display of the current ZIP code.
-    // Takes data as parameter.
+    // Updates the display of the current ZIP code.
     static displayZIP(data) {
-        // Checks if DOM element exist.
         if (this.zipElement) {
-            // Sets inner text to data.ZIP.
-            this.zipElement.innerText = `ZIP: ${data.ZIP}`;
-            // Add the 'updated' class to change the color
-            this.zipElement.closest('.date-zip-container').classList.add('updated');
+            this.zipElement.innerText = `ZIP: ${data.ZIP}`;  // Update ZIP code display.
+            this.zipElement.closest('.date-zip-container').classList.add('updated');  // Change color.
         }
     }
 
-    // Call these methods to show ZIP and Date after a successful fetch
-    static handleFetchSuccess(data) {
-        // Display date and ZIP after fetch
-        this.displayDate(data);
-        this.displayZIP(data);
-    }
-    
     // Displays an error message in the error container.
     static showError(message) {
-        // Checks if DOM element exist.
         if (this.errorContainer) {
-            // Sets inner text to error message passed.
-            this.errorContainer.textContent = message;
-            // Then displays block
-            this.errorContainer.style.display = 'block';
+            this.errorContainer.textContent = message;  // Set error message.
+            this.errorContainer.style.display = 'block';  // Make error container visible.
         }
     }
+
     // Resets all displayed data in preparation for new fetches.
     static clearAllDisplays() {
-        this.resetResults();
-        this.resetDailyHigh();
-        this.resetDate();
-        this.resetZIP();
+        this.resetResults();  // Reset UV index results.
+        this.resetDailyHigh();  // Reset daily UV high display.
+        this.resetDate();  // Reset date display.
+        this.resetZIP();  // Reset ZIP code display.
     }
+
     // Resets the UV index display elements.
     static resetResults() {
-        // Loops through each element 
-        this.uvIndexElements.forEach(element => {
-            // Sets inner text to 0
-            element.innerText = '0';
-        });
-        // Loops through each image element.
-        this.uviBarImages.forEach(img => {
-            // Sets to default image.
-            img.src = '/image/uvi-bar-0.svg';
-        });
+        this.uvIndexElements.forEach(element => element.innerText = '0');  // Reset UV index text.
+        this.uviBarImages.forEach(img => img.src = '/image/uvi-bar-0.svg');  // Reset UV index bar images.
     }
 
     // Resets the display elements for daily UV high.
     static resetDailyHigh() {
-        // Sets daily high element to 0.
-        if (this.dailyHighElement) this.dailyHighElement.innerText = '0';
-        // Sets daily level element to and empty string.
-        if (this.dailyUVLevelElement) this.dailyUVLevelElement.innerText = '';
+        if (this.dailyHighElement) this.dailyHighElement.innerText = '0';  // Reset daily high element.
+        if (this.dailyUVLevelElement) this.dailyUVLevelElement.innerText = '';  // Reset daily UV level element.
     }
 
     // Resets the displayed date.
     static resetDate() {
-        // Sets inner text to just Date.
-        if (this.dateElement) this.dateElement.innerText = 'Date:';
+        if (this.dateElement) this.dateElement.innerText = 'Date:';  // Reset date element.
     }
+
     // Resets the displayed ZIP code.
     static resetZIP() {
-        // Sets inner text to just ZIP code.
-        if (this.zipElement) this.zipElement.innerText = 'ZIP code:';
+        if (this.zipElement) this.zipElement.innerText = 'ZIP code:';  // Reset ZIP code element.
     }
 }

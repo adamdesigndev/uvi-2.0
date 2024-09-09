@@ -7,8 +7,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>UV Index</title>
+
+    <!-- Main stylesheet -->
     <link rel="stylesheet" href="/CSS/style.css" />
+
+    <!-- Touch Icon for Apple devices -->
     <link rel="apple-touch-icon" href="image/apple-touch-icon-2.png" />
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -16,13 +21,15 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap"
       rel="stylesheet"
     />
-    <!-- Scripts -->
+
+    <!-- Main JavaScript file for app functionality -->
     <script defer type="module" src="/scripts/app.js"></script>
   </head>
 
   <body>
     <!-- Loading Screen -->
     <div id="loading-screen" class="loading-screen">
+      <!-- Logo animation during loading -->
       <div class="logo-container">
         <img
           src="/image/uvi-2-animation-1.svg"
@@ -47,53 +54,72 @@
       </div>
     </div>
 
-    <!-- Logo -->
+    <!-- Header section containing the main logo -->
     <header class="main-outer-container">
       <div class="header-container">
-        <img class="logo" src="/image/uvi-2.svg" alt="" />
+        <img class="logo" src="/image/uvi-2.svg" alt="UV Index Logo" />
       </div>
     </header>
 
-    <!-- Modal -->
+    <!-- Modal for displaying information about the UV Index -->
     <dialog class="modal" id="modal">
+      <!-- Modal close button -->
       <div class="modal-button-container">
         <button class="modal-close-button close-button">X</button>
       </div>
 
+      <!-- Information on UV Index levels -->
       <h2>About the UV Index</h2>
       <h3>Exposure Category</h3>
       <div class="modal-level-container">
         <p>
           <span class="modal-subhead"
             >Low 1-2
-            <img class="modal-graph" src="/image/modal-bar-low.svg" alt=""
+            <img
+              class="modal-graph"
+              src="/image/modal-bar-low.svg"
+              alt="Low UV Level"
           /></span>
         </p>
         <p>
           <span class="modal-subhead"
             >Moderate 3-5
-            <img class="modal-graph" src="/image/modal-bar-mod.svg" alt=""
+            <img
+              class="modal-graph"
+              src="/image/modal-bar-mod.svg"
+              alt="Moderate UV Level"
           /></span>
         </p>
         <p>
           <span class="modal-subhead"
             >High 6-7
-            <img class="modal-graph" src="/image/modal-bar-high.svg" alt=""
+            <img
+              class="modal-graph"
+              src="/image/modal-bar-high.svg"
+              alt="High UV Level"
           /></span>
         </p>
         <p>
           <span class="modal-subhead"
             >Very High 9-10
-            <img class="modal-graph" src="/image/modal-bar-vhigh.svg" alt=""
+            <img
+              class="modal-graph"
+              src="/image/modal-bar-vhigh.svg"
+              alt="Very High UV Level"
           /></span>
         </p>
         <p>
           <span class="modal-subhead"
             >Extreme 11+
-            <img class="modal-graph" src="/image/modal-bar-extr.svg" alt=""
+            <img
+              class="modal-graph"
+              src="/image/modal-bar-extr.svg"
+              alt="Extreme UV Level"
           /></span>
         </p>
       </div>
+
+      <!-- Credit section -->
       <div class="credit-container">
         <p class="credit-name">Developed by Adam Flores</p>
         <p class="credit-power">
@@ -109,8 +135,9 @@
       </div>
     </dialog>
 
-    <!-- Content Top -->
+    <!-- Main Content Section -->
     <section class="main-outer-container main-section-container">
+      <!-- Top container displaying the daily UV Index -->
       <div class="container-top">
         <h1 class="header-text">Daily UV Index</h1>
         <div class="container-daily-high">
@@ -276,16 +303,16 @@
         </div>
       </div>
 
-      <!-- Date and zip -->
+      <!-- Container for displaying date and ZIP code -->
       <div class="date-zip-container">
         <p class="zip-text" id="js-display-zip">ZIP: 00000</p>
         <p class="date-text" id="js-date">Date: XXX/00/0000</p>
       </div>
 
-      <!-- Error -->
+      <!-- Error message container, hidden by default -->
       <div id="error-container" style="display: none; color: red"></div>
 
-      <!-- Search -->
+      <!-- Search box for user to enter ZIP code -->
       <div class="search-box">
         <form action="" id="search-form">
           <div class="input-container">
